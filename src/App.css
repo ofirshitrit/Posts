@@ -1,7 +1,15 @@
 body {
-  direction: rtl;
   font-family: 'Fredoka', cursive;
+  margin: 0;
+}
 
+header {
+  background-color: aliceblue;
+  
+}
+
+header h1 {
+  margin: 0px;
 }
 
 .post-list{
