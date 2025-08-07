@@ -20,14 +20,15 @@ function Home({ posts }) {
       <h1>Post List</h1>
 
       {/* Search input for search posts by title  */}
-      <div className="search-input">
+      <div className="search-section">
         <input
+        className="search-input"
           type="text"
           placeholder="Search post by its title"
           value={searchTitle}
           onChange={handleOnChange}
         />
-        <button onClick={handleSearchClick}>
+        <button className="search-button" onClick={handleSearchClick}>
           <FaSearch />
         </button>
       </div>
