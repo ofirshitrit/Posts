@@ -14,7 +14,6 @@ function App() {
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
       .then((res) => {
-        console.log("posts: ", res.data);
         setPosts(res.data);
       })
       .catch((err) => console.error("שגיאה בשליפת פוסטים:", err));
