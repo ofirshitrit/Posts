@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PostList from '../Components/PostList';
-import axios from 'axios';
 
 
-function Home() {
+function Home({posts, onSearchPost}) {
  
-  const [posts, setPosts] = useState([]);
+  const [title, setTitle] = useState("");
 
-  
-  useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/posts')
-      .then(res => {
-        console.log("posts: ", res.data);
-        setPosts(res.data);
-      })
-      .catch(err => console.error('שגיאה בשליפת פוסטים:', err));
-  }, []);
-
-
+  const handleOnChange = (event) => {
+    setTitle(event.target.value)
+  }
 
   return (
     <div className="Home">
         <h1>Post List</h1>
+        <div>
+          <input type="text" placeholder='Search post by its title' value={title} onChange={handleOnChange} />
+          
+        </div>
         <PostList posts = {posts}/>
     </div>
   );
