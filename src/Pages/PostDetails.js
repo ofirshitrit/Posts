@@ -31,20 +31,20 @@ export default function PostDetails() {
   }, [post]);
 
   
-  if (!post) return <div>טוען פוסט...</div>;
+  if (!post) return <div>Post is loading...</div>;
 
 
   return (
     <div className="post-details">
       <h2>{post.title}</h2>
       <p>{post.body}</p>
-      <ul>
+      <ol>
         {comments.map((comment) => (
           <li key={comment.id}>
             <PostComment comment={comment}/>
           </li>
         ))}
-      </ul>
+      </ol>
       
     </div>
   );
