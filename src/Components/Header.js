@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header>
  <nav>
-        <ul style={{ display: 'flex', listStyle: 'none', gap: '15px' }}>
+        <ul >
           <li><Link to="/">Home</Link></li>
           <li><Link to="/add-post">Add Post</Link></li>
         </ul>

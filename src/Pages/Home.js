@@ -18,6 +18,7 @@ function Home({ posts }) {
   return (
     <div className="Home">
       <h1>Post List</h1>
+
       {/* Search input for search posts by title  */}
       <div className="search-input">
         <input
@@ -30,6 +31,13 @@ function Home({ posts }) {
           <FaSearch />
         </button>
       </div>
+
+      <div>
+        
+        <h3>Number of posts: {isSearching ? filteredPosts.length : posts.length}  </h3>
+      </div>
+
+      {/* Posts for display */}
       {isSearching ? (
         filteredPosts.length > 0 ? (
           <PostList posts={filteredPosts} />

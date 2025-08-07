@@ -10,6 +10,7 @@ import AddPostForm from "./Pages/AddPostForm";
 function App() {
   const [posts, setPosts] = useState([]);
 
+
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
