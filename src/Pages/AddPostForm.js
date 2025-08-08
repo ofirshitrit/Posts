@@ -52,33 +52,34 @@ export default function AddPostForm({ onAddPost }) {
   }
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="title">Title: </label>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Enter title fot your post"
-          />
-          {titleError ? <p className="error-msg">{titleError}</p> : ""}
-        </div>
-
-        <div className="field">
-          <label htmlFor="body">Body: </label>
-          <textarea
-            name="body"
-            id="body"
-            value={body}
-            onChange={handleBodyChange}
-            placeholder="Write the body of the post here"
-          />
-          {bodyError ? <p className="error-msg">{bodyError}</p> : ""}
-        </div>
-
-        <button type="submit">Add Post</button>
-      </form>
+      <div className="form-container">
+        <form className="add-post-form" onSubmit={handleSubmit}>
+          <h2 class="form-title">Add New Post</h2>
+          <div className="form-group">
+            <label htmlFor="title">Title: </label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="Enter title fot your post"
+            />
+            {titleError ? <p className="error-msg">{titleError}</p> : ""}
+          </div>
+          <div className="form-group">
+            <label htmlFor="body">Body: </label>
+            <textarea
+              name="body"
+              id="body"
+              value={body}
+              onChange={handleBodyChange}
+              placeholder="Write the body of the post here"
+            />
+            {bodyError ? <p className="error-msg">{bodyError}</p> : ""}
+          </div>
+          <button type="submit" class="submit-btn">Add Post</button>
+        </form>
+      </div>
     </div>
   );
 }
