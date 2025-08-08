@@ -3,41 +3,65 @@ import PostComment from "../Components/PostComment";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "../Styles/comments.css";
-import '../Styles/loader.css';
-
+import "../Styles/loader.css";
 
 export default function PostDetails() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
+  const [notFound, setNotFound] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(true);
 
   const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
 
-  //Get Post using the Id from the URL
+  //Get Post id using the Id from the URL
   useEffect(() => {
+    setLoadingPost(true);
+    setNotFound(false);
+
+    const timer = setTimeout(() => {
+      setLoadingPost(false);
+      setNotFound(true);
+    }, 30000);
+
     axios
       .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
       .then((res) => {
-        setPost(res.data);
+        clearTimeout(timer);
+        if (!res.data || Object.keys(res.data).length === 0) {
+          setNotFound(true);
+        } else {
+          setPost(res.data);
+          setNotFound(false);
+        }
       })
       .catch((err) => {
-        console.error("שגיאה בטעינת פרטי הפוסט:", err);
+        setNotFound(true);
+      })
+      .finally(() => {
+        setLoadingPost(false);
       });
-  }, [id]);
 
-  
+    return () => clearTimeout(timer);
+  }, [id]);
 
   //Get the comments of thr post
   useEffect(() => {
     if (!post) return;
+    setLoadingComments(true);
     axios
       .get(`https://jsonplaceholder.typicode.com/comments?postId=${post.id}`)
-      .then((res) => setComments(res.data))
-      .catch((err) =>
-        console.error("שגיאה בקבלת התגובות של פוסט :", post.id, err)
-      );
+      .then((res) => {
+        setComments(res.data);
+        setLoadingComments(false);
+      })
+      .catch((err) => {
+        console.error("שגיאה בקבלת התגובות של פוסט :", post.id, err);
+        setLoadingComments(false);
+      });
   }, [post]);
 
-  if (!post)
+  if (loadingPost) {
     return (
       <div className="loading-content">
         <div className="loading-spinner">
@@ -58,6 +82,11 @@ export default function PostDetails() {
         </div>
       </div>
     );
+  }
+
+  if (notFound) {
+    return <div className="post-not-found">❌ Post not found</div>;
+  }
 
   return (
     <div className="post-details-container">
@@ -70,13 +99,20 @@ export default function PostDetails() {
         </div>
         <div className="comments-container">
           <h3>Comments</h3>
-          <ol>
-            {comments.map((comment, index) => (
-              <li key={comment.id}>
-                <PostComment comment={comment} index={index + 1} />
-              </li>
-            ))}
-          </ol>
+          {loadingComments ? (
+            <div className="loading-comments">
+              <div className="spinner"></div>
+              <p>Loading comments...</p>
+            </div>
+          ) : (
+            <ol>
+              {comments.map((comment, index) => (
+                <li key={comment.id}>
+                  <PostComment comment={comment} index={index + 1} />
+                </li>
+              ))}
+            </ol>
+          )}
         </div>
       </div>
     </div>

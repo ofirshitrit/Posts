@@ -10,7 +10,6 @@ import AddPostForm from "./Pages/AddPostForm";
 function App() {
   const [posts, setPosts] = useState([]);
 
-
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
@@ -20,27 +19,6 @@ function App() {
       .catch((err) => console.error("שגיאה בשליפת פוסטים:", err));
   }, []);
 
-  const getLastUserId = () => {
-    let lastId = 0;
-    if (posts.length > 0) {
-      const IdsList = posts.map((post) => post.id);
-      lastId = Math.max(...IdsList);
-    }
-    return lastId;
-  };
-
-  function handleAddPost({ title, body }) {
-    const lastId = getLastUserId();
-
-    const newPost = {
-      userId: 200,
-      id: lastId + 1,
-      title,
-      body,
-    };
-
-    setPosts((prevPosts) => [...prevPosts, newPost]);
-  }
 
   return (
     <Router>
@@ -48,7 +26,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home posts={posts} />} />
         <Route path="/posts/:id" element={<PostDetails />} />
-        <Route path="/add-post" element={<AddPostForm  onAddPost={handleAddPost}/>} />
+        <Route
+          path="/add-post"
+          element={<AddPostForm setPosts={setPosts} />}
+        />
       </Routes>
     </Router>
   );
