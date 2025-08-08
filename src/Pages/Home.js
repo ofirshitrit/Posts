@@ -27,9 +27,9 @@ function Home({ posts }) {
           value={searchTitle}
           onChange={handleOnChange}
         />
-        <div className="search-icon">
+        <span className="search-icon">
           <FaSearch />
-        </div>
+        </span>
       </div>
 
       <div>

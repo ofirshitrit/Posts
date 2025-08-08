@@ -1,0 +1,134 @@
+
+/*****************************************/
+/*              Form Styles              */
+/*****************************************/
+
+.form-container {
+  display: flex;
+  justify-content: center;
+}
+form {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
+  width: 100%;
+  max-width: 500px;
+  border: 2px solid var(--primary-color);
+  margin-top: 1rem;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+input[type="text"],
+textarea {
+  width: 90%;
+  padding: 15px;
+  border: 1px solid var(--neutral-7);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0c4a6e;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(
+    135deg,
+    var(--light-green) 0%,
+    var(--medium-green) 50%,
+    var(--light-green) 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px var(--dark-green);
+}
+
+.submit-btn:hover {
+  color: var(--neutral-10);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px var(--dark-green);
+  background: linear-gradient(
+    135deg,
+    var(--medium-green) 0%,
+    var(--light-green) 50%,
+    var(--medium-green)
+  );
+}
+
+.error-msg {
+  color: var(--color-error);
+}
+.error-input {
+  border: 2px solid var(--color-error) !important;
+}
+
+@media (max-width: 600px) {
+  form {
+    padding: 20px;
+    max-width: 70%;
+    border-radius: 12px;
+  }
+
+  .form-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  input[type="text"],
+  textarea {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  textarea {
+    min-height: 80px;
+  }
+
+  .submit-btn {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+}

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PostComment from "../Components/PostComment";
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import "../Styles/comments.css";
+import '../Styles/loader.css';
 
 
 export default function PostDetails() {
@@ -18,34 +20,65 @@ export default function PostDetails() {
         setPost(res.data);
       })
       .catch((err) => {
-        console.error('שגיאה בטעינת פרטי הפוסט:', err);
+        console.error("שגיאה בטעינת פרטי הפוסט:", err);
       });
   }, [id]);
 
+  
+
   //Get the comments of thr post
   useEffect(() => {
-    if (!post) return; 
-    axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${post.id}`)
-      .then(res => setComments(res.data))
-      .catch(err => console.error('שגיאה בקבלת התגובות של פוסט :', post.id, err));
+    if (!post) return;
+    axios
+      .get(`https://jsonplaceholder.typicode.com/comments?postId=${post.id}`)
+      .then((res) => setComments(res.data))
+      .catch((err) =>
+        console.error("שגיאה בקבלת התגובות של פוסט :", post.id, err)
+      );
   }, [post]);
 
-  
-  if (!post) return <div>Post is loading...</div>;
-
+  if (!post)
+    return (
+      <div className="loading-content">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <div>
+            <div className="loading-text">
+              Post is loading
+              <span className="loading-dots">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </span>
+            </div>
+            <div className="loading-subtext">
+              Please wait while we fetch the content
+            </div>
+          </div>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="post-details">
-      <h2>{post.title}</h2>
-      <p>{post.body}</p>
-      <ol>
-        {comments.map((comment) => (
-          <li key={comment.id}>
-            <PostComment comment={comment}/>
-          </li>
-        ))}
-      </ol>
-      
+    <div className="post-details-container">
+      <div className="post-details">
+        <div className="title-container">
+          <h2>{post.title}</h2>
+        </div>
+        <div className="body-container">
+          <p>{post.body}</p>
+        </div>
+        <div className="comments-container">
+          <h3>Comments</h3>
+          <ol>
+            {comments.map((comment, index) => (
+              <li key={comment.id}>
+                <PostComment comment={comment} index={index + 1} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
     </div>
   );
 }

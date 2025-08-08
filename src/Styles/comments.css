@@ -1,0 +1,94 @@
+
+/* Comments style */
+.post-details-container {
+  display: flex;
+  justify-content: center;
+}
+
+.post-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--neutral-2);
+  width: 60%;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 600px) {
+  .post-details {
+    width: 90%;
+  }
+}
+.title-container {
+  background-color: var(--primary-color);
+  width: 100%;
+  text-align: center;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.comments-container ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comments-container li {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #ccc; /* קו מפריד בין הפריטים */
+}
+
+.comments-container li:last-child {
+  border-bottom: none; /* להסיר את הקו מפריד אחרי הפריט האחרון */
+}
+
+.comment-email,
+.comment-index {
+  color: var(--purple-color);
+  font-size: 0.875rem;
+  text-decoration: none;
+  background: rgba(79, 70, 229, 0.1);
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  width: fit-content;
+  margin: 0.25rem;
+  
+}
+
+.body-container {
+  padding: 1rem;
+}
+
+.comments-container h3 {
+  padding-left: 1rem;
+}
+
+.comments-container h3,
+.email-id-container,
+.comment-body {
+  padding-left: 1rem;
+}
+
+.comment-body {
+  padding-right: 1.5rem;
+}
+
+.email-id-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 1rem;
+}
+
+.comments-count {
+  background: linear-gradient(135deg, var(--light-green), var(--medium-green));
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}

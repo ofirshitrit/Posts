@@ -1,5 +1,6 @@
 import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../Styles/form.css'
 
 export default function AddPostForm({ onAddPost }) {
   const navigate = useNavigate();
@@ -51,9 +52,9 @@ export default function AddPostForm({ onAddPost }) {
     } 
   }
   return (
-    <div>
+    
       <div className="form-container">
-        <form className="add-post-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <h2 class="form-title">Add New Post</h2>
           <div className="form-group">
             <label htmlFor="title">Title: </label>
@@ -63,6 +64,7 @@ export default function AddPostForm({ onAddPost }) {
               value={title}
               onChange={handleTitleChange}
               placeholder="Enter title fot your post"
+              className={titleError ? "error-input" : ""}
             />
             {titleError ? <p className="error-msg">{titleError}</p> : ""}
           </div>
@@ -74,12 +76,14 @@ export default function AddPostForm({ onAddPost }) {
               value={body}
               onChange={handleBodyChange}
               placeholder="Write the body of the post here"
+              className={bodyError ? "error-input" : ""}
+
             />
             {bodyError ? <p className="error-msg">{bodyError}</p> : ""}
           </div>
           <button type="submit" class="submit-btn">Add Post</button>
         </form>
-      </div>
+      
     </div>
   );
 }
