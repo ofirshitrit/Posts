@@ -13,7 +13,6 @@ function Home({ posts }) {
     setSearchTitle(event.target.value);
   };
 
-  const handleSearchClick = () => {};
 
   return (
     <div className="Home">
@@ -24,13 +23,13 @@ function Home({ posts }) {
         <input
         className="search-input"
           type="text"
-          placeholder="Search post by its title"
+          placeholder="Search posts by title"
           value={searchTitle}
           onChange={handleOnChange}
         />
-        <button className="search-button" onClick={handleSearchClick}>
+        <div className="search-icon">
           <FaSearch />
-        </button>
+        </div>
       </div>
 
       <div>
