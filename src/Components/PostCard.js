@@ -6,7 +6,7 @@ export default function PostCard({post}) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-     navigate(`/posts/${post.id}`);
+     navigate(`/post-comments/${post.id}`);
   }
   return (
     <div className='post-container'  onClick={() => handleClick(post.id)}>

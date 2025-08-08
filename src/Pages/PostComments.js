@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import "../Styles/comments.css";
 import "../Styles/loader.css";
 
-export default function PostDetails() {
+export default function PostComments() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [notFound, setNotFound] = useState(false);
@@ -45,7 +45,7 @@ export default function PostDetails() {
     return () => clearTimeout(timer);
   }, [id]);
 
-  //Get the comments of thr post
+  //Get the comments of the post
   useEffect(() => {
     if (!post) return;
     setLoadingComments(true);
@@ -56,7 +56,6 @@ export default function PostDetails() {
         setLoadingComments(false);
       })
       .catch((err) => {
-        console.error("שגיאה בקבלת התגובות של פוסט :", post.id, err);
         setLoadingComments(false);
       });
   }, [post]);
@@ -69,11 +68,6 @@ export default function PostDetails() {
           <div>
             <div className="loading-text">
               Post is loading
-              <span className="loading-dots">
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
-              </span>
             </div>
             <div className="loading-subtext">
               Please wait while we fetch the content
@@ -85,7 +79,7 @@ export default function PostDetails() {
   }
 
   if (notFound) {
-    return <div className="post-not-found">❌ Post not found</div>;
+    return <div className="post-not-found">Post not found</div>;
   }
 
   return (
