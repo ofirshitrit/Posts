@@ -11,10 +11,10 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     setIsLoading(true);
-    setTimeout(() => {
+
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
       .then((res) => {
@@ -22,21 +22,19 @@ function App() {
         setError(null);
       })
       .catch(() => setError("Failed to load posts. Please try again later."))
-      .finally(() => setIsLoading(false)); // גם אם שגיאה או הצלחה - נגמור טעינה
-  }, 2000);
+      .finally(() => setIsLoading(false));
   }, []);
-
 
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Home posts={posts} error={error} isLoading={isLoading} />} />
-        <Route path="/post-comments/:id" element={<PostComments />} />
         <Route
-          path="/add-post"
-          element={<AddPostForm setPosts={setPosts} />}
+          path="/"
+          element={<Home posts={posts} error={error} isLoading={isLoading} />}
         />
+        <Route path="/post-comments/:id" element={<PostComments />} />
+        <Route path="/add-post" element={<AddPostForm setPosts={setPosts} />} />
       </Routes>
     </Router>
   );
