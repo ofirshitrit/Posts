@@ -1,17 +1,19 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function PostCard({post}) {
-
+export default function PostCard({ post }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-     navigate(`/post-comments/${post.id}`);
-  }
+    navigate(`/post-comments/${post.id}`);
+  };
   return (
-    <div className='post-container'  onClick={() => handleClick(post.id)}>
-      <h2>{post.title}</h2>
-      <p>{post.body}</p>
+    <div className="post-card-inner">
+      <h2 className="post-title">{post.title}</h2>
+      <p className="post-body">{post.body}</p>
+      <div className="post-footer">
+        <span className="post-id">Post #{post.id}</span>
+      </div>
     </div>
-  )
+  );
 }

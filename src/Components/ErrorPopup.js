@@ -1,5 +1,5 @@
 import React from "react";
-import "../Styles/form.css";
+import "../Styles/popup.css";
 
 export default function ErrorPopup({ showErrorPopup, setShowErrorPopup }) {
   return (

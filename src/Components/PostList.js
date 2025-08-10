@@ -1,11 +1,12 @@
-import React from "react";
 import PostCard from "./PostCard";
 
 export default function PostList({ posts }) {
   return (
-    <div className="post-list">
+    <div className="posts-grid">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <div key={post.id} className="post-card">
+          <PostCard post={post} />
+        </div>
       ))}
     </div>
   );

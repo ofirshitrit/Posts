@@ -18,8 +18,6 @@ export default function AddPostForm({ setPosts }) {
     setTitle(event.target.value);
   };
 
-  
-
   const handleBodyChange = (event) => {
     setBody(event.target.value);
   };
@@ -54,20 +52,20 @@ export default function AddPostForm({ setPosts }) {
       body,
     };
 
-    setIsLoading(true); 
+    setIsLoading(true);
 
     axios
       .post("https://jsonplaceholder.typicode.com/posts", newPost)
       .then((response) => {
         console.log(response.data);
         setPosts((prevPosts) => [...prevPosts, response.data]);
-        setShowPopup(true); 
+        setShowPopup(true);
         setTitle("");
         setBody("");
       })
       .catch((error) => {
         console.error("Error:", error);
-        setShowErrorPopup(true)
+        setShowErrorPopup(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -110,18 +108,22 @@ export default function AddPostForm({ setPosts }) {
             />
             {bodyError ? <p className="error-msg">{bodyError}</p> : ""}
           </div>
-          <button type="submit" className="submit-btn" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <div
-                  className="btn-spinner"
-                ></div>
-                Loading...
-              </>
-            ) : (
-              "Add Post"
-            )}
-          </button>
+          <div className="btn-container">
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={isLoading || title.trim() === "" || body.trim() === ""}
+            >
+              {isLoading ? (
+                <>
+                  <div className="btn-spinner"></div>
+                  Loading...
+                </>
+              ) : (
+                "Add Post"
+              )}
+            </button>
+          </div>
         </form>
       </div>
 
@@ -129,7 +131,13 @@ export default function AddPostForm({ setPosts }) {
         <SuccessPopup showPopup={showPopup} setShowPopup={setShowPopup} />
       )}
 
-      {showErrorPopup && (<ErrorPopup showErrorPopup={showErrorPopup} setShowErrorPopup={setShowErrorPopup} />)}
+      {showErrorPopup && (
+        <ErrorPopup
+          showErrorPopup={showErrorPopup}
+          setShowErrorPopup={setShowErrorPopup}
+
+        />
+      )}
     </>
   );
 }

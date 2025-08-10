@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../Styles/form.css";
+import "../Styles/popup.css";
 import Confetti from "react-confetti";
 
 export default function SuccessPopup({ showPopup, setShowPopup }) {
