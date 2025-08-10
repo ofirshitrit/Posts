@@ -41,7 +41,7 @@ export default function AddPostForm({ setPosts }) {
       isBodyValid = true;
     }
 
-    //The form valid only if title and body are not empty
+    //The form valid only if the title and body are not empty
     return isTitleValid && isBodyValid;
   };
 

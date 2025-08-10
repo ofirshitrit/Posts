@@ -4,8 +4,8 @@ export default function PostComment({comment, index}) {
   return (
     <div className='comment'>
       <div className='email-id-container'>
-         <span className="comment-index">#{index}</span>
         <h6 class="comment-email">{comment.email}</h6>
+         <span className="comment-index">#{index}</span>
       </div>
       <p class="comment-body">{comment.body}</p>
     </div>
