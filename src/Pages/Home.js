@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PostList from "../Components/PostList";
-import { FaSearch } from "react-icons/fa";
 import { Search } from "lucide-react";
+import Loader from "../Components/Loader";
 
 function Home({ posts, error, isLoading }) {
   const [searchTitle, setSearchTitle] = useState("");
@@ -9,17 +9,10 @@ function Home({ posts, error, isLoading }) {
 
   if (isLoading) {
     return (
-      <div className="loading-content">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <div>
-            <div className="loading-text">Post List is loading</div>
-            <div className="loading-subtext">
-              Please wait while we fetch the content
-            </div>
-          </div>
-        </div>
-      </div>
+      <Loader
+        text={"Post List is loading"}
+        subtext={"Please wait while we fetch the content"}
+      />
     );
   }
 
@@ -35,11 +28,9 @@ function Home({ posts, error, isLoading }) {
     post.title.toLowerCase().includes(searchTitle.toLowerCase())
   );
 
-
   return (
     <div className="Home">
       <h1>Post List</h1>
-      
 
       {/* Search Bar */}
       <div className="search-bar-wrapper">

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import "../Styles/comments.css";
 import "../Styles/loader.css";
+import Loader from "../Components/Loader";
 
 export default function PostComments() {
   const { id } = useParams();
@@ -62,19 +63,7 @@ export default function PostComments() {
 
   if (loadingPost) {
     return (
-      <div className="loading-content">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <div>
-            <div className="loading-text">
-              Post is loading
-            </div>
-            <div className="loading-subtext">
-              Please wait while we fetch the content
-            </div>
-          </div>
-        </div>
-      </div>
+      <Loader text={"Post is loading"} subtext={"Please wait while we fetch the content"} />
     );
   }
 
