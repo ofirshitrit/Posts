@@ -1,74 +1,44 @@
-import React, { useState, useEffect } from "react";
-import PostComment from "../Components/PostComment";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import "../Styles/comments.css";
 import "../Styles/loader.css";
-import Loader from "../Components/Loader";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPost, fetchComments } from "../api";
+import Loader from '../Components/Loader';
+import PostComment from '../Components/Comment';
+
 
 export default function PostComments() {
   const { id } = useParams();
-  const [post, setPost] = useState(null);
-  const [notFound, setNotFound] = useState(false);
-  const [loadingPost, setLoadingPost] = useState(true);
 
-  const [comments, setComments] = useState([]);
-  const [loadingComments, setLoadingComments] = useState(false);
+  const {
+    data: post,
+    error: errorFetchPost,
+    isLoading: isPostLoading,
+  } = useQuery({
+    queryKey: ["post", id],
+    queryFn: () => fetchPost(id),
+  });
 
-  //Get Post id using the Id from the URL
-  useEffect(() => {
-    setLoadingPost(true);
-    setNotFound(false);
+  const {
+    data: comments,
+    error: errorFetchComments,
+    isLoading: isCommentsLoading,
+  } = useQuery({
+    queryKey: ["comments", id],
+    queryFn: () => fetchComments(id),
+  });
 
-    const timer = setTimeout(() => {
-      setLoadingPost(false);
-      setNotFound(true);
-    }, 30000);
-
-    axios
-      .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then((res) => {
-        clearTimeout(timer);
-        if (!res.data || Object.keys(res.data).length === 0) {
-          setNotFound(true);
-        } else {
-          setPost(res.data);
-          setNotFound(false);
-        }
-      })
-      .catch((err) => {
-        setNotFound(true);
-      })
-      .finally(() => {
-        setLoadingPost(false);
-      });
-
-    return () => clearTimeout(timer);
-  }, [id]);
-
-  //Get the comments of the post
-  useEffect(() => {
-    if (!post) return;
-    setLoadingComments(true);
-    axios
-      .get(`https://jsonplaceholder.typicode.com/comments?postId=${post.id}`)
-      .then((res) => {
-        setComments(res.data);
-        setLoadingComments(false);
-      })
-      .catch((err) => {
-        setLoadingComments(false);
-      });
-  }, [post]);
-
-  if (loadingPost) {
+  if (isPostLoading) {
     return (
-      <Loader text={"Post is loading"} subtext={"Please wait while we fetch the content"} />
+      <Loader
+        text={"Post is loading"}
+        subtext={"Please wait while we fetch the content"}
+      />
     );
   }
 
-  if (notFound) {
-    return <div className="post-not-found">Post not found</div>;
+  if (errorFetchPost) {
+    return <div className="error-msg">{errorFetchPost.message}</div>;
   }
 
   return (
@@ -82,11 +52,13 @@ export default function PostComments() {
         </div>
         <div className="comments-container">
           <h3>Comments</h3>
-          {loadingComments ? (
+          {isCommentsLoading ? (
             <div className="loading-comments">
               <div className="spinner"></div>
               <p>Loading comments...</p>
             </div>
+          ) : errorFetchComments ? (
+            <div className="error-msg">{errorFetchComments.message}</div>
           ) : (
             <ol>
               {comments.map((comment, index) => (

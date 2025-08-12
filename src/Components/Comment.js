@@ -1,6 +1,5 @@
-import React from 'react'
 
-export default function PostComment({comment, index}) {
+export default function Comment({comment, index}) {
   return (
     <div className='comment'>
       <div className='email-id-container'>

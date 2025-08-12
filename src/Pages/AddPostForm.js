@@ -1,120 +1,183 @@
 import { useState } from "react";
 import "../Styles/form.css";
-import axios from "axios";
-import SuccessPopup from "../Components/SuccessPopup";
-import ErrorPopup from "../Components/ErrorPopup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle, XCircle } from "lucide-react";
 
-export default function AddPostForm({ setPosts }) {
-  const [title, setTitle] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [body, setBody] = useState("");
-  const [bodyError, setBodyError] = useState("");
+export default function AddPostForm() {
+  const [formData, setFormData] = useState({
+    title: "",
+    body: "",
+  });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleBodyChange = (event) => {
-    setBody(event.target.value);
+  const queryClient = useQueryClient();
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const addPostMutation = useMutation({
+
+    mutationFn: async (newPost) => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newPost),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to add post");
+      }
+      return res.json();
+    },
+    onSuccess: (data) => {
+      // Refresh the posts list and save the new list in the cache
+      queryClient.setQueryData(["posts"], (oldPosts) => {
+      return oldPosts ? [...oldPosts, data] : [data];
+    });
+      setSuccessMessage(
+        "Form submitted successfully! Your post has been created."
+      );
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 7000);
+      setFormData({ title: "", body: "" });
+
+    },
+    onError: (error) => {
+      setErrorMessage(error.message);
+            setTimeout(() => {
+        setErrorMessage("");
+      }, 7000);
+      setSuccessMessage("");
+    },
+  });
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case "title":
+        if (!value.trim()) {
+          return "Title is required";
+        }
+        return "";
+      case "body":
+        if (!value.trim()) {
+          return "Body is required";
+        }
+        return "";
+      default:
+        return "";
+    }
   };
 
   const validateForm = () => {
-    let isTitleValid = true;
-    let isBodyValid = true;
-    if (title === "") {
-      setTitleError("This field is mandatory");
-      isTitleValid = false;
-    } else {
-      setTitleError("");
-      isTitleValid = true;
-    }
+    const newErrors = {};
 
-    if (body === "") {
-      setBodyError("This field is mandatory");
-      isBodyValid = false;
-    } else {
-      setBodyError("");
-      isBodyValid = true;
-    }
+    //Loop each field and validate it
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        newErrors[key] = error;
+      }
+    });
 
-    //The form valid only if the title and body are not empty
-    return isTitleValid && isBodyValid;
+    return newErrors;
   };
 
-  function handleAddPost(title, body) {
-    const newPost = {
-      userId: 200,
-      title,
-      body,
-    };
-
-    setIsLoading(true);
-
-    axios
-      .post("https://jsonplaceholder.typicode.com/posts", newPost)
-      .then((response) => {
-        console.log(response.data);
-        setPosts((prevPosts) => [...prevPosts, response.data]);
-        setShowPopup(true);
-        setTitle("");
-        setBody("");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setShowErrorPopup(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
-
-  function handleSubmit(e) {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = (e) => {
     e.preventDefault();
-    let isFormValid = validateForm();
-    if (isFormValid) {
-      handleAddPost(title, body);
+    const newErrors = validateForm();
+    setFormErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      const newPost = {
+        userId: 200,
+        title: formData.title,
+        body: formData.body,
+      };
+      addPostMutation.mutate(newPost);
+      setFormErrors({});
+      setFormData({ title: "", body: "" });
     }
-  }
+  };
+
+  const isFormValid =
+    Object.keys(validateForm()).length === 0 &&
+    formData.title.trim() &&
+    formData.body.trim();
+
   return (
     <>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h2 class="form-title">Add New Post</h2>
+          <h2 className="form-title">Add New Post</h2>
+
+          {successMessage && (
+            <div className="alert-message alert-success">
+              <div className="alert-content">
+                <CheckCircle className="alert-icon success-icon" />
+                <p className="alert-text">{successMessage}</p>
+              </div>
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="alert-message alert-error">
+              <div className="alert-content">
+                <XCircle className="alert-icon error-icon" />
+                <p className="alert-text">{errorMessage}</p>
+              </div>
+            </div>
+          )}
+
           <div className="form-group">
-            <label htmlFor="title">Title: </label>
+            <label htmlFor="title">
+              Title: <span className="mandatory-field">*</span>{" "}
+            </label>
             <input
               id="title"
+              name="title"
               type="text"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="Enter title fot your post"
-              className={titleError ? "error-input" : ""}
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="Enter title for your post"
+              className={formErrors.title ? "error-input" : ""}
             />
-            {titleError ? <p className="error-msg">{titleError}</p> : ""}
+            {formErrors.title && (
+              <p className="error-msg">{formErrors.title}</p>
+            )}
           </div>
+
           <div className="form-group">
-            <label htmlFor="body">Body: </label>
+            <label htmlFor="body">
+              Body: <span className="mandatory-field">*</span>
+            </label>
             <textarea
               name="body"
               id="body"
-              value={body}
-              onChange={handleBodyChange}
+              value={formData.body}
+              onChange={handleInputChange}
               placeholder="Write the body of the post here"
-              className={bodyError ? "error-input" : ""}
+              className={formErrors.body ? "error-input" : ""}
             />
-            {bodyError ? <p className="error-msg">{bodyError}</p> : ""}
+            {formErrors.body && <p className="error-msg">{formErrors.body}</p>}
           </div>
+
           <div className="btn-container">
             <button
               type="submit"
               className="submit-btn"
-              disabled={isLoading || title.trim() === "" || body.trim() === ""}
+              disabled={addPostMutation.isLoading}
             >
-              {isLoading ? (
+              {addPostMutation.isLoading ? (
                 <>
                   <div className="btn-spinner"></div>
                   Loading...
@@ -126,18 +189,6 @@ export default function AddPostForm({ setPosts }) {
           </div>
         </form>
       </div>
-
-      {showPopup && (
-        <SuccessPopup showPopup={showPopup} setShowPopup={setShowPopup} />
-      )}
-
-      {showErrorPopup && (
-        <ErrorPopup
-          showErrorPopup={showErrorPopup}
-          setShowErrorPopup={setShowErrorPopup}
-
-        />
-      )}
     </>
   );
 }

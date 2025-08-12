@@ -1,9 +1,10 @@
 import { useState } from "react";
-import PostList from "../Components/PostList";
 import { Search } from "lucide-react";
-import Loader from "../Components/Loader";
+import PostList from '../Components/PostList';
+import Loader from '../Components/Loader';
 
-function Home({ posts, error, isLoading }) {
+
+function Home({ posts, error, isLoading, isError }) {
   const [searchTitle, setSearchTitle] = useState("");
   const isSearching = searchTitle.trim() !== "";
 
@@ -16,8 +17,8 @@ function Home({ posts, error, isLoading }) {
     );
   }
 
-  if (error) {
-    return <div className="error-msg">{error}</div>;
+  if (isError) {
+    return <div className="error-msg">Error: {error.message}</div>;
   }
 
   if (posts.length === 0) {

@@ -55,9 +55,6 @@ textarea {
   line-height: 1.5;
 }
 
-.error-msg {
-  color: var(--color-error);
-}
 .error-input {
   border: 2px solid var(--color-error) !important;
 }
@@ -147,4 +144,54 @@ textarea {
   opacity: 0.6;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+
+.mandatory-field {
+color: var(--color-error);
+}
+
+
+.alert-message {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid;
+  font-family: Arial, sans-serif;
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+}
+
+.alert-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+.success-icon {
+  color: #34d399; /* ירוק */
+}
+
+.error-icon {
+  color: #f87171; /* אדום */
+}
+
+.alert-success {
+  background-color: #ecfdf5; /* ירוק בהיר */
+  border-color: #bbf7d0; /* ירוק בהיר גבול */
+  color: #065f46; /* ירוק כהה טקסט */
+}
+
+.alert-error {
+  background-color: #fef2f2; /* אדום בהיר */
+  border-color: #fecaca; /* אדום בהיר גבול */
+  color: #991b1b; /* אדום כהה טקסט */
+}
+
+.alert-text {
+  font-weight: 500;
+  margin: 0;
 }
