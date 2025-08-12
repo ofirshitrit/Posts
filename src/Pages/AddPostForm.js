@@ -152,7 +152,7 @@ export default function AddPostForm() {
               className={formErrors.title ? "error-input" : ""}
             />
             {formErrors.title && (
-              <p className="error-msg">{formErrors.title}</p>
+              <p className="error-msg-input">{formErrors.title}</p>
             )}
           </div>
 
@@ -168,7 +168,7 @@ export default function AddPostForm() {
               placeholder="Write the body of the post here"
               className={formErrors.body ? "error-input" : ""}
             />
-            {formErrors.body && <p className="error-msg">{formErrors.body}</p>}
+            {formErrors.body && <p className="error-msg-input">{formErrors.body}</p>}
           </div>
 
           <div className="btn-container">
