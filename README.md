@@ -9,6 +9,12 @@ A modern React application that demonstrates core frontend development skills by
 - **Add New Post:** Create new posts with a user-friendly form (title and body fields)
 - **Responsive Design:** Fully responsive layout that works seamlessly on desktop and mobile devices
 
+## Extra Features
+- **Edit Post:** Edit existing posts with a pre-filled form
+- **Search by Post ID:** Search posts by exact Post ID
+- **Pagination:** Displays a limited number of posts at a time, with options to load more.
+
+
 ## Technical Implementation
 - **React Hooks:** Built with functional components using useState, useEffect, and custom hooks
 - React Router: Smooth navigation between pages with proper routing

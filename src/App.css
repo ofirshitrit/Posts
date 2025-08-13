@@ -307,3 +307,28 @@ body {
   border-style: solid;
   border-color: white transparent transparent transparent;
 }
+
+
+.load-more-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.load-more-btn {
+  background: linear-gradient(90deg, #7c3aed, #2563eb);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.5);
+  width: 100%;
+  font-size: medium;}
+
+
+  .load-more-btn:hover {
+  background: linear-gradient(90deg, #6b21a8, #1e40af);
+}

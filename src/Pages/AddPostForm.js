@@ -37,14 +37,11 @@ export default function AddPostForm() {
         return oldPosts ? [...oldPosts, data] : [data];
       });
 
-      const localPosts = JSON.parse(localStorage.getItem("localPosts") || "[]");
-      localStorage.setItem("localPosts", JSON.stringify([...localPosts, data]));
-
       setSuccessMessage("Post created successfully!");
       setTimeout(() => {
         setSuccessMessage("");
         navigate("/");
-      }, 4000);
+      }, 2000);
 
       setFormData({ title: "", body: "" });
     },
@@ -52,7 +49,7 @@ export default function AddPostForm() {
       setErrorMessage(error.message);
       setTimeout(() => {
         setErrorMessage("");
-      }, 7000);
+      }, 5000);
       setSuccessMessage("");
     },
   });
@@ -68,21 +65,15 @@ export default function AddPostForm() {
           : [updatedPost]
       );
 
-      const localPosts = JSON.parse(localStorage.getItem("localPosts") || "[]");
-      const updatedLocalPosts = localPosts.map((post) =>
-        post.id === updatedPost.id ? updatedPost : post
-      );
-      localStorage.setItem("localPosts", JSON.stringify(updatedLocalPosts));
-
       setSuccessMessage("Post updated successfully!");
       setTimeout(() => {
         setSuccessMessage("");
         navigate("/");
-      }, 4000);
+      }, 2000);
     },
     onError: (error) => {
       setErrorMessage(error.message);
-      setTimeout(() => setErrorMessage(""), 7000);
+      setTimeout(() => setErrorMessage(""), 5000);
       setSuccessMessage("");
     },
   });

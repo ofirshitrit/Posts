@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
-import PostList from '../Components/PostList';
-import Loader from '../Components/Loader';
-
+import PostList from "../Components/PostList";
+import Loader from "../Components/Loader";
 
 function Home({ posts, error, isLoading, isError }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [visibleCount, setVisibleCount] = useState(10);
   const isSearching = searchTerm.trim() !== "";
 
   if (isLoading) {
@@ -25,17 +25,23 @@ function Home({ posts, error, isLoading, isError }) {
     return <p className="no-posts-msg">No posts found.</p>;
   }
 
+  const filteredPosts = posts.filter((post) => {
+    const search = searchTerm.toLowerCase().trim();
 
-  const filteredPosts = posts.filter(post => {
-  const search = searchTerm.toLowerCase().trim();
-  
-  const titleMatch = post.title.toLowerCase().includes(search);
-  
-  const idMatch = post.id.toString() === search;
-  
-  return titleMatch || idMatch;
-});
+    const titleMatch = post.title.toLowerCase().includes(search);
 
+    const idMatch = post.id.toString() === search;
+
+    return titleMatch || idMatch;
+  });
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 20); 
+  };
+
+  const postsToShow = isSearching
+    ? filteredPosts
+    : posts.slice(0, visibleCount);
 
   return (
     <div className="Home">
@@ -58,21 +64,35 @@ function Home({ posts, error, isLoading, isError }) {
       </div>
 
       {/* Posts for display */}
-      {isSearching ? (
-        filteredPosts.length > 0 ? (
-          <PostList posts={filteredPosts} />
-        ) : (
-          <div className="no-results">
-            <div className="no-results-icon">
-              <Search size={48} className="no-results-svg" />
-            </div>
-            <h3>No posts found</h3>
-            <p>Try adjusting your search terms or browse all posts.</p>
-          </div>
-        )
+      {postsToShow.length > 0 ? (
+        <PostList posts={postsToShow} />
       ) : (
-        <PostList posts={posts} />
+        <div className="no-results">
+          <div className="no-results-icon">
+            <Search size={48} className="no-results-svg" />
+          </div>
+          <h3>No posts found</h3>
+          <p>Try adjusting your search terms or browse all posts.</p>
+        </div>
       )}
+
+
+      {/* Load More button */}
+      {!isSearching && visibleCount < posts.length && (
+        <div>
+        <div>Displaying {Math.min(visibleCount, posts.length)} of {posts.length} posts</div>
+          <div className="load-more-wrapper">
+            <button
+              className="load-more-btn"
+              onClick={handleLoadMore}
+            >
+              Load More
+            </button>
+          </div>
+        </div>
+      )}
+
+      
     </div>
   );
 }
