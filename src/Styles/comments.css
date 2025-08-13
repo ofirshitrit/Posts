@@ -107,3 +107,8 @@
   box-shadow: 0 0 8px rgba(204, 0, 0, 0.3);
   user-select: none;
 }
+
+
+.no-comments-container {
+  margin-bottom: 1rem;
+}

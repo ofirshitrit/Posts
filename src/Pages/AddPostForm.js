@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../Styles/form.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle, XCircle } from "lucide-react";
+import { addPostRequest, updatePostRequest } from "../api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function AddPostForm() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const editingPost = location.state?.post || null;
+
   const [formData, setFormData] = useState({
-    title: "",
-    body: "",
+    title: editingPost ? editingPost.title : "",
+    body: editingPost ? editingPost.body : "",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -16,40 +22,67 @@ export default function AddPostForm() {
 
   const queryClient = useQueryClient();
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+   useEffect(() => {
+    setFormData({
+      title: editingPost ? editingPost.title : "",
+      body: editingPost ? editingPost.body : "",
+    });
+  }, [editingPost]);
 
   const addPostMutation = useMutation({
-
-    mutationFn: async (newPost) => {
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to add post");
-      }
-      return res.json();
-    },
+    mutationFn: addPostRequest,
     onSuccess: (data) => {
       // Refresh the posts list and save the new list in the cache
       queryClient.setQueryData(["posts"], (oldPosts) => {
-      return oldPosts ? [...oldPosts, data] : [data];
-    });
-      setSuccessMessage(
-        "Form submitted successfully! Your post has been created."
-      );
+        return oldPosts ? [...oldPosts, data] : [data];
+      });
+
+      const localPosts = JSON.parse(localStorage.getItem("localPosts") || "[]");
+      localStorage.setItem("localPosts", JSON.stringify([...localPosts, data]));
+
+      setSuccessMessage("Post created successfully!");
       setTimeout(() => {
         setSuccessMessage("");
-      }, 7000);
-      setFormData({ title: "", body: "" });
+        navigate("/");
+      }, 4000);
 
+      setFormData({ title: "", body: "" });
     },
     onError: (error) => {
       setErrorMessage(error.message);
-            setTimeout(() => {
+      setTimeout(() => {
         setErrorMessage("");
       }, 7000);
+      setSuccessMessage("");
+    },
+  });
+
+  const updatePostMutation = useMutation({
+    mutationFn: updatePostRequest,
+    onSuccess: (updatedPost) => {
+      queryClient.setQueryData(["posts"], (oldPosts) =>
+        oldPosts
+          ? oldPosts.map((post) =>
+              post.id === updatedPost.id ? updatedPost : post
+            )
+          : [updatedPost]
+      );
+
+      const localPosts = JSON.parse(localStorage.getItem("localPosts") || "[]");
+      const updatedLocalPosts = localPosts.map((post) =>
+        post.id === updatedPost.id ? updatedPost : post
+      );
+      localStorage.setItem("localPosts", JSON.stringify(updatedLocalPosts));
+
+      setSuccessMessage("Post updated successfully!");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/");
+      }, 4000);
+    },
+    onError: (error) => {
+      setErrorMessage(error.message);
+      setTimeout(() => setErrorMessage(""), 7000);
       setSuccessMessage("");
     },
   });
@@ -98,14 +131,19 @@ export default function AddPostForm() {
     setFormErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      const newPost = {
-        userId: 200,
-        title: formData.title,
-        body: formData.body,
-      };
-      addPostMutation.mutate(newPost);
-      setFormErrors({});
-      setFormData({ title: "", body: "" });
+      if (editingPost) {
+        updatePostMutation.mutate({
+          id: editingPost.id,
+          title: formData.title,
+          body: formData.body,
+        });
+      } else {
+        addPostMutation.mutate({
+          userId: 200,
+          title: formData.title,
+          body: formData.body,
+        });
+      }
     }
   };
 
@@ -118,7 +156,9 @@ export default function AddPostForm() {
     <>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h2 className="form-title">Add New Post</h2>
+          <h2 className="form-title">
+            {editingPost ? "Edit Post" : "Add New Post"}
+          </h2>
 
           {successMessage && (
             <div className="alert-message alert-success">
@@ -168,20 +208,28 @@ export default function AddPostForm() {
               placeholder="Write the body of the post here"
               className={formErrors.body ? "error-input" : ""}
             />
-            {formErrors.body && <p className="error-msg-input">{formErrors.body}</p>}
+            {formErrors.body && (
+              <p className="error-msg-input">{formErrors.body}</p>
+            )}
           </div>
 
           <div className="btn-container">
             <button
               type="submit"
               className="submit-btn"
-              disabled={addPostMutation.isLoading}
+              disabled={
+                addPostMutation.isLoading ||
+                updatePostMutation.isLoading ||
+                !isFormValid
+              }
             >
-              {addPostMutation.isLoading ? (
+              {addPostMutation.isLoading || updatePostMutation.isLoading ? (
                 <>
                   <div className="btn-spinner"></div>
                   Loading...
                 </>
+              ) : editingPost ? (
+                "Update Post"
               ) : (
                 "Add Post"
               )}

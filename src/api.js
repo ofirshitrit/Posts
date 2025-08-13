@@ -1,11 +1,26 @@
 
+// export const fetchPosts = async () => {
+//     const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+//     if (!res.ok) {
+//       throw new Error("Failed to fetch posts");
+//     }
+//     return res.json();
+//   };
+
 export const fetchPosts = async () => {
-    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-    if (!res.ok) {
-      throw new Error("Failed to fetch posts");
-    }
-    return res.json();
-  };
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  if (!res.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+  
+  const serverPosts = await res.json();
+
+
+  const localPosts = JSON.parse(localStorage.getItem("localPosts") || "[]");
+
+  return [...serverPosts, ...localPosts];
+};
+
 
 export const fetchPost = async (id) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
@@ -28,3 +43,28 @@ export const fetchComments = async (postId) => {
   }
   return res.json();
 };
+
+export const addPostRequest = async (newPost) => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newPost),
+  });
+  
+  if (!res.ok) {
+    throw new Error("Failed to add post");
+  }
+  
+  return res.json();
+}
+
+
+export const updatePostRequest = async (post) => {
+   const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(post),
+  });
+  if (!response.ok) throw new Error("Failed to update post");
+  return response.json();
+}

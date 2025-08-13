@@ -5,8 +5,8 @@ import Loader from '../Components/Loader';
 
 
 function Home({ posts, error, isLoading, isError }) {
-  const [searchTitle, setSearchTitle] = useState("");
-  const isSearching = searchTitle.trim() !== "";
+  const [searchTerm, setSearchTerm] = useState("");
+  const isSearching = searchTerm.trim() !== "";
 
   if (isLoading) {
     return (
@@ -25,9 +25,17 @@ function Home({ posts, error, isLoading, isError }) {
     return <p className="no-posts-msg">No posts found.</p>;
   }
 
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(searchTitle.toLowerCase())
-  );
+
+  const filteredPosts = posts.filter(post => {
+  const search = searchTerm.toLowerCase().trim();
+  
+  const titleMatch = post.title.toLowerCase().includes(search);
+  
+  const idMatch = post.id.toString() === search;
+  
+  return titleMatch || idMatch;
+});
+
 
   return (
     <div className="Home">
@@ -41,9 +49,9 @@ function Home({ posts, error, isLoading, isError }) {
           </div>
           <input
             type="text"
-            placeholder="Search posts by title"
-            value={searchTitle}
-            onChange={(e) => setSearchTitle(e.target.value)}
+            placeholder="Search posts by title or post ID"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
         </div>
