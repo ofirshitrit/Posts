@@ -1,14 +1,10 @@
+// PostCard component that represent a post details
 import { useNavigate } from "react-router-dom";
 import { PencilLine, MessageCircle } from "lucide-react";
 
 export default function PostCard({ post }) {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(`/post-comments/${post.id}`, {
-      state: { title: post.title, body: post.body },
-    });
-  };
 
  const handleEditClick = (e) => {
     e.stopPropagation(); 

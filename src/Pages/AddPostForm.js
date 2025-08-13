@@ -1,3 +1,5 @@
+// AddFormPage: page for creating a new post or editing an existing one
+
 import { useState, useEffect } from "react";
 import "../Styles/form.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,12 +18,12 @@ export default function AddPostForm() {
   });
 
   const [formErrors, setFormErrors] = useState({});
-
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const queryClient = useQueryClient();
 
+  // If the form is for edit, fill the fields with the values otherwise make it empty
    useEffect(() => {
     setFormData({
       title: editingPost ? editingPost.title : "",
@@ -29,6 +31,7 @@ export default function AddPostForm() {
     });
   }, [editingPost]);
 
+  
   const addPostMutation = useMutation({
     mutationFn: addPostRequest,
     onSuccess: (data) => {

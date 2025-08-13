@@ -1,4 +1,4 @@
-
+// Comment component that represent a comment of a post
 export default function Comment({comment, index}) {
   return (
     <div className='comment'>

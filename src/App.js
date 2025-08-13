@@ -8,8 +8,7 @@ import AddPostForm from "./Pages/AddPostForm";
 import { useQuery } from "@tanstack/react-query";
 
 function App() {
-  // TODO: clean the code include css
-  
+ 
 
   const {
     data: posts, error, isLoading, isError 

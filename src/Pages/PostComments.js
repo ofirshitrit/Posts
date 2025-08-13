@@ -1,3 +1,4 @@
+// PostComments: page for viewing comments of a specific post
 import { useParams, useLocation  } from "react-router-dom";
 import "../Styles/comments.css";
 import { useQuery } from "@tanstack/react-query";

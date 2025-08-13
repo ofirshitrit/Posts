@@ -1,3 +1,4 @@
+// Home: page for displaying the posts list
 import { useState } from "react";
 import { Search } from "lucide-react";
 import PostList from "../Components/PostList";

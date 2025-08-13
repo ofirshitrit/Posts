@@ -1,3 +1,4 @@
+// PostList component that represent the Posts list
 import PostCard from "./PostCard";
 
 export default function PostList({ posts }) {

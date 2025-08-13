@@ -14,7 +14,7 @@ form {
   box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
   width: 100%;
   max-width: 500px;
-  border: 2px solid var(--primary-color);
+  border: 2px solid #c0d8f0;
   margin-top: 1rem;
 }
 
@@ -40,7 +40,7 @@ input[type="text"],
 textarea {
   width: 90%;
   padding: 15px;
-  border: 1px solid var(--neutral-7);
+  border: 1px solid #bfbfbf;
   border-radius: 12px;
   font-size: 16px;
   font-family: inherit;
@@ -56,7 +56,7 @@ textarea {
 }
 
 .error-input {
-  border: 2px solid var(--color-error) !important;
+  border: 2px solid #942f2f !important;
 }
 
 .error-msg-input {
@@ -153,7 +153,7 @@ textarea {
 
 
 .mandatory-field {
-color: var(--color-error);
+color: #942f2f;
 }
 
 
@@ -177,23 +177,23 @@ color: var(--color-error);
 }
 
 .success-icon {
-  color: #34d399; /* ירוק */
+  color: #34d399; 
 }
 
 .error-icon {
-  color: #f87171; /* אדום */
+  color: #f87171; 
 }
 
 .alert-success {
-  background-color: #ecfdf5; /* ירוק בהיר */
-  border-color: #bbf7d0; /* ירוק בהיר גבול */
-  color: #065f46; /* ירוק כהה טקסט */
+  background-color: #ecfdf5;
+  border-color: #bbf7d0; 
+  color: #065f46; 
 }
 
 .alert-error {
-  background-color: #fef2f2; /* אדום בהיר */
-  border-color: #fecaca; /* אדום בהיר גבול */
-  color: #991b1b; /* אדום כהה טקסט */
+  background-color: #fef2f2; 
+  border-color: #fecaca; 
+  color: #991b1b; 
 }
 
 .alert-text {
